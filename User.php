@@ -41,7 +41,8 @@ class User extends Connection {
                     'expires_at' => $expires_at
                 ]);
 
-                return ['status' => 'success', 'token' => $token, 'role' => $user['role']];
+                return ['status' => 'success', 'token' => $token, 'user'=>$username, 'role' => $user['role']];
+                //return ['status' => 'success', 'data'=>['token' => $token, 'user'=>$username, 'role' => $user['role']]];
             } else {
                 return ['status' => 'error', 'message' => 'Invalid username or password'];
             } 
@@ -2308,7 +2309,7 @@ class User extends Connection {
     public function logout($token) { 
         try { 
 
-            $stmt = $this->pdo->prepare('DELETE * FROM tokens WHERE token = :token');
+            $stmt = $this->pdo->prepare('DELETE FROM tokens WHERE token = :token');
             $stmt->execute(['token' => $token]); 
         
             return ['status' => 'success','message'=>'Logged out successfully ']; 

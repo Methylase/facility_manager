@@ -1,6 +1,7 @@
 <?php
 require_once 'RoleMiddleware.php';
 
+
 $response = RoleMiddleware::checkRole(['admin']);
 
 if ($response['status'] === 'success') {
