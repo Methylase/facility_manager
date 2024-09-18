@@ -1,5 +1,6 @@
 <?php
 require_once 'RoleMiddleware.php';
+include 'cors.php';
 
 $response = RoleMiddleware::checkRole(['admin']);
 
@@ -8,7 +9,7 @@ if ($response['status'] === 'success') {
         $data = json_decode(file_get_contents("php://input"), true);
         $service_code = $user->protectData($data['service_code']);
         $service = $user->protectData($data['service']);
-        $ress= $user->protectData($data['ress']);
+        $address= $user->protectData($data['address']);
         $phone_number= $user->protectData($data['phone_number']);
         $landline= $user->protectData($data['landline']);
         $emergency_number= $user->protectData($data['emergency_number']);
@@ -38,8 +39,8 @@ if ($response['status'] === 'success') {
             echo json_encode([ 'error_name'=>'service_code', 'message' => 'Service code is required']);
         }elseif(empty($service)){
             echo json_encode([ 'error_name'=>'service', 'message' => 'Service is required']);
-        }elseif(empty($ress)){
-            echo json_encode([ 'error_name'=>'ress', 'message' => 'ress is required']);
+        }elseif(empty($address)){
+            echo json_encode([ 'error_name'=>'address', 'message' => 'address is required']);
         }elseif(empty($phone_number)){
             echo json_encode([ 'error_name'=>'phone_number', 'message' => 'Phone number is required']);
         }elseif(empty($landline)){
@@ -93,7 +94,7 @@ if ($response['status'] === 'success') {
                 $response = $user->update_service_profile(
                 $service_code,
                 $service,
-                $ress,
+                $address,
                 $phone_number,
                 $landline,
                 $emergency_number,

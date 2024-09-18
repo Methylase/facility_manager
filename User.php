@@ -73,7 +73,7 @@ class User extends Connection {
     public function post_service_profile(
         $service_code,
         $service,
-        $ress,
+        $address,
         $phone_number,
         $landline,
         $emergency_number,
@@ -107,16 +107,16 @@ class User extends Connection {
                 return [ 'error_name'=>'service_code', 'message' => 'Service code already exist'];
              }
 
-            $stmt = $this->pdo->prepare('INSERT INTO service_profile (service_code, service, ress, phone_number,
+            $stmt = $this->pdo->prepare('INSERT INTO service_profile (service_code, service, address, phone_number,
                 landline, emergency_number, service_type, number_of_beds, specialization, service_manager,
                 deputy_manager, on_call_1, on_call_2, gender, age_range, duration_of_stay, lone_working,
                 challenging_behavior, personal_care_support, physical_challenge, sleep_in_bed, parking,
-                pets, unpaid_breaks, created_by ,creator_id ) VALUES (:service_code, :service, :ress, :phone_number,
+                pets, unpaid_breaks, created_by ,creator_id ) VALUES (:service_code, :service, :address, :phone_number,
                 :landline, :emergency_number, :service_type, :number_of_beds, :specialization, :service_manager,
                 :deputy_manager, :on_call_1, :on_call_2, :gender, :age_range, :duration_of_stay, :lone_working,
                 :challenging_behavior, :personal_care_support, :physical_challenge, :sleep_in_bed, :parking,
                 :pets, :unpaid_breaks, :created_by, :creator_id)');
-                $stmt->execute(['service_code'=>$service_code, 'service'=>$service, 'ress'=>$ress, 'phone_number'
+                $stmt->execute(['service_code'=>$service_code, 'service'=>$service, 'address'=>$address, 'phone_number'
                 =>$phone_number,'landline'=>$landline, 'emergency_number' =>$emergency_number, 'service_type'=>$service_type, 
                 'number_of_beds'=>$number_of_beds, 'specialization'=>$specialization, 'service_manager'=>$service_manager,
                 'deputy_manager'=>$deputy_manager, 'on_call_1'=>$on_call_1, 'on_call_2'=>$on_call_2, 'gender'=>$gender, 
@@ -162,11 +162,10 @@ class User extends Connection {
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
         } 
     }    
-
     public function update_service_profile(
         $service_code,
         $service,
-        $ress,
+        $address,
         $phone_number,
         $landline,
         $emergency_number,
@@ -199,7 +198,7 @@ class User extends Connection {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
              }
             $stmt = $this->pdo->prepare("UPDATE service_profile SET service_code='$service_code', service='$service', 
-            ress='$ress', phone_number='$phone_number', landline='$landline', emergency_number='$emergency_number', 
+            address='$address', phone_number='$phone_number', landline='$landline', emergency_number='$emergency_number', 
             service_type='$service_type', number_of_beds='$number_of_beds', specialization='$specialization', 
             service_manager='$service_manager', deputy_manager='$deputy_manager', on_call_1='$on_call_1', 
             on_call_2='$on_call_2', gender='$gender', age_range='$age_range', duration_of_stay='$duration_of_stay', 
@@ -522,7 +521,7 @@ class User extends Connection {
                 lastname='$lastname', email='$email', phone_number='$phone_number', ress='$ress',
                 profile_image='$profile_image', created_by='$created_by'  WHERE id='$id'");
                 $stmt->execute();
-                return ['status' => 'success','message'=>'service worker  profile updated successfully']; 
+                return ['status' => 'success','message'=>'Service worker  profile updated successfully']; 
           
                 
             } catch (PDOException $e) { 
@@ -546,7 +545,7 @@ class User extends Connection {
 
                 $stmt = $this->pdo->prepare("UPDATE service_worker_profile SET status='delete' WHERE 'id'='$id'");
                 $stmt->execute();
-                return ['status' => 'success','message'=>'Young people profile successfully deleted']; 
+                return ['status' => 'success','message'=>'Service worker profile successfully deleted']; 
           
                 
             } catch (PDOException $e) { 
@@ -582,14 +581,6 @@ class User extends Connection {
             $i_a_of_marac_refferal,
             $created_by,
             $last_modified,
-            $start_date,
-            $start_time,
-            $end_date,
-            $end_time,
-            $session,
-            $communication_method,
-            $venue_of_session,
-            $notes,
             $creator_id
         ) {
             try {
@@ -604,8 +595,7 @@ class User extends Connection {
                 do_you_want_to_take_further_action, is_yp_aware_that_you_will_contact_external_agencies, 
                 if_no_enter_brief_outline_otherwise_write_n_a, allegations_suspension_of_substance_abuse, 
                 witness_es_statements_need_to_be_taken_down, has_a_manager_been_informed, has_a_marac_referral_been_made,
-                i_a_of_marac_refferal, created_by, last_modified, start_date, start_time, end_date, end_time, session,
-                communication_method, venue_of_session, notes, creator_id) VALUES (:police_involve, :fire_brigade_involved, 
+                i_a_of_marac_refferal, created_by, last_modified, creator_id) VALUES (:police_involve, :fire_brigade_involved, 
                 :ambulance_involved, :details_of_emergency_survive_involved, :involved_external_person, :names_of_external_person, 
                 :social_service_involved, :cmht_involved, :other_external_services_involved, :names_of_other_external_services_involved, 
                 :date_of_incident, :time_of_incident, :is_this_serious_incident, :your_cause_of_concern_about_yp_yps_child,
@@ -613,8 +603,7 @@ class User extends Connection {
                 :do_you_want_to_take_further_action, :is_yp_aware_that_you_will_contact_external_agencies, 
                 :if_no_enter_brief_outline_otherwise_write_n_a, :allegations_suspension_of_substance_abuse, 
                 :witness_es_statements_need_to_be_taken_down, :has_a_manager_been_informed, :has_a_marac_referral_been_made,
-                :i_a_of_marac_refferal, :created_by, :last_modified, :start_date, :start_time, :end_date, :end_time, :session,
-                :communication_method, :venue_of_session, :notes, :creator_id)');
+                :i_a_of_marac_refferal, :created_by, :last_modified, :creator_id)');
                 $stmt->execute(['police_involve'=>$police_involve, 'fire_brigade_involved'=>$fire_brigade_involved, 
                 'ambulance_involved'=>$ambulance_involved, 'details_of_emergency_survive_involved'=>$details_of_emergency_survive_involved,
                 'involved_external_person'=>$involved_external_person, 'names_of_external_person'=>$names_of_external_person, 
@@ -631,9 +620,7 @@ class User extends Connection {
                 'allegations_suspension_of_substance_abuse'=>$allegations_suspension_of_substance_abuse, 
                 'witness_es_statements_need_to_be_taken_down'=>$witness_es_statements_need_to_be_taken_down, 
                 'has_a_manager_been_informed'=>$has_a_manager_been_informed, 'has_a_marac_referral_been_made'=>$has_a_marac_referral_been_made,
-                'i_a_of_marac_refferal'=>$i_a_of_marac_refferal, 'created_by'=>$created_by, 'last_modified'=>$last_modified, 
-                'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_date, 'session'=>$session,
-                'communication_method'=>$communication_method, 'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+                'i_a_of_marac_refferal'=>$i_a_of_marac_refferal, 'created_by'=>$created_by, 'last_modified'=>$last_modified, 'creator_id'=>$creator_id
                 ]);
     
                 return ['status' => 'success', 'message' => 'New incident report registered successfully'];
@@ -700,14 +687,6 @@ class User extends Connection {
             $i_a_of_marac_refferal,
             $created_by,
             $last_modified,
-            $start_date,
-            $start_time,
-            $end_date,
-            $end_time,
-            $session,
-            $communication_method,
-            $venue_of_session,
-            $notes,
             $id
         ) { 
             try { 
@@ -727,8 +706,7 @@ class User extends Connection {
                 is_yp_aware_that_you_will_contact_external_agencies='$is_yp_aware_that_you_will_contact_external_agencies', if_no_enter_brief_outline_otherwise_write_n_a='$if_no_enter_brief_outline_otherwise_write_n_a',
                 allegations_suspension_of_substance_abuse='$allegations_suspension_of_substance_abuse', witness_es_statements_need_to_be_taken_down='$witness_es_statements_need_to_be_taken_down',
                 has_a_manager_been_informed='$has_a_manager_been_informed', has_a_marac_referral_been_made='$has_a_marac_referral_been_made', i_a_of_marac_refferal='$i_a_of_marac_refferal', created_by='$created_by',
-                last_modified='$last_modified', start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', session='$session', communication_method='$communication_method',
-                venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+                last_modified='$last_modified', WHERE id='$id'");
                 $stmt->execute();
                 return ['status' => 'success','message'=>'Incident report updated successfully']; 
           
@@ -756,7 +734,7 @@ class User extends Connection {
             } 
         } 
 
-        public function property_check_report(
+        public function post_property_check_report(
             $property_checked_name,
             $type,
             $date_of_check,
@@ -767,33 +745,21 @@ class User extends Connection {
             $service,
             $room,
             $location_notes,
-            $start_date,
-            $start_time,
-            $end_date,
-            $end_time,
-            $session,
-            $communication_method,
-            $venue_of_session,
-            $case_notes,
             $creator_id
         ){
             try {
                 $stmt = $this->pdo->prepare('INSERT INTO property_check_report (
                 property_checked_name, type, date_of_check, time_of_check,
                 staff_lead, staff_assistant, yp_assisting_check, service, room,
-                location_notes, start_date, start_time, end_date, end_time, session,
-                communication_method, venue_of_session, case_notes, creator_id) 
+                location_notes, creator_id) 
                 VALUES (:property_checked_name, :type, :date_of_check, :time_of_check,
                 :staff_lead, :staff_assistant, :yp_assisting_check, :service, :room,
-                :location_notes, :start_date, :start_time, :end_date, :end_time, :session,
-                :communication_method, :venue_of_session, :case_notes, :creator_id)');
+                :location_notes, :creator_id)');
                 $stmt->execute(['property_checked_name'=>$property_checked_name, 
                 'type'=>$type, 'date_of_check'=>$date_of_check, 'time_of_check'=>$time_of_check,
                 'staff_lead'=>$staff_lead, 'staff_assistant'=>$staff_assistant, 
                 'yp_assisting_check'=>$yp_assisting_check, 'service'=>$service, 'room'=>$room,
-                'location_notes'=>$location_notes, 'start_date'=>$start_date, 'start_time'=>$start_time, 
-                'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 'communication_method'=>$communication_method, 
-                'venue_of_session'=>$venue_of_session, 'case_notes'=>$case_notes, 'creator_id'=>$creator_id
+                'location_notes'=>$location_notes, 'creator_id'=>$creator_id
                 ]);
 
                 return ['status' => 'success', 'message' => 'Property check report registered successfully'];
@@ -843,14 +809,6 @@ class User extends Connection {
         $service,
         $room,
         $location_notes,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $case_notes,
         $id
     ) { 
         try { 
@@ -862,9 +820,7 @@ class User extends Connection {
              }
             $stmt = $this->pdo->prepare("UPDATE property_check_report SET property_checked_name='$property_checked_name', type='$type',
             date_of_check='$date_of_check', time_of_check='$time_of_check', staff_lead='$staff_lead', staff_assistant='$staff_assistant',
-            yp_assisting_check='$yp_assisting_check', service='$service', room='$room', location_notes='$location_notes',
-            start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', session='$session',
-            communication_method='$communication_method', venue_of_session='$venue_of_session', case_notes='$case_notes' WHERE id='$id'");
+            yp_assisting_check='$yp_assisting_check', service='$service', room='$room', location_notes='$location_notes', WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Property check report updated successfully']; 
       
@@ -876,15 +832,15 @@ class User extends Connection {
     
     public function delete_property_check_report($id) { 
         try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM medication_report WHERE id = :id');
+            $stmt = $this->pdo->prepare('SELECT * FROM property_check_report WHERE id = :id');
             $stmt->execute(['id' => $id]);
 
             if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
             }
-            $stmt = $this->pdo->prepare("UPDATE medication_report SET status='delete' WHERE id='$id'");
+            $stmt = $this->pdo->prepare("UPDATE property_check_report SET status='delete' WHERE id='$id'");
             $stmt->execute();
-            return ['status' => 'success','message'=>'medication report successfully deleted']; 
+            return ['status' => 'success','message'=>'Property check report successfully deleted']; 
       
             
         } catch (PDOException $e) { 
@@ -899,28 +855,15 @@ class User extends Connection {
         $time,
         $is_medication_still_accurate,
         $list_yps_medication_below,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
             $stmt = $this->pdo->prepare('INSERT INTO medication_report (
-            client, date, time, is_medication_still_accurate, list_yps_medication_below, 
-            start_date, start_time, end_date, end_time, session,
-            communication_method, venue_of_session, notes, creator_id) 
+            client, date, time, is_medication_still_accurate, list_yps_medication_below, creator_id) 
             VALUES (:client, :date, :time, :is_medication_still_accurate, 
-            :list_yps_medication_below, :start_date, :start_time, :end_date, :end_time, 
-            :session, :communication_method, :venue_of_session, :notes, :creator_id)');
+            :list_yps_medication_below, :creator_id)');
             $stmt->execute(['client'=>$client, 'date'=>$date, 'time'=>$time,  'is_medication_still_accurate'=>$is_medication_still_accurate, 
-            'list_yps_medication_below'=>$list_yps_medication_below, 'start_date'=>$start_date, 'start_time'=>$start_time, 
-            'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 'communication_method'=>$communication_method, 
-            'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+            'list_yps_medication_below'=>$list_yps_medication_below, 'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New medication report registered successfully'];
@@ -935,8 +878,8 @@ class User extends Connection {
 
             $stmt = $this->pdo->prepare('SELECT * FROM medication_report WHERE status IS NULL');
             $stmt->execute(); 
-            $get_all_incident_report = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return ['status' => 'success','data'=>$get_all_incident_report]; 
+            $get_all_medication_report = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_medication_report]; 
             
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
@@ -949,9 +892,9 @@ class User extends Connection {
 
             $stmt = $this->pdo->prepare('SELECT * FROM medication_report WHERE status IS NULL AND id = :id');
             $stmt->execute(['id' => $id]); 
-            $get_property_check_report = $stmt->fetch(PDO::FETCH_ASSOC);
-            if($get_property_check_report){  
-                return ['status' => 'success','data'=>$get_property_check_report]; 
+            $get_medication_report = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_medication_report){  
+                return ['status' => 'success','data'=>$get_medication_report]; 
                
             }
             return ['status' => 'error', 'message' => 'No medication report record for this '.$id];
@@ -968,14 +911,6 @@ class User extends Connection {
         $time,
         $is_medication_still_accurate,
         $list_yps_medication_below,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
@@ -987,8 +922,7 @@ class User extends Connection {
              }
             $stmt = $this->pdo->prepare("UPDATE medication_report SET client='$client' ,date='$date',
             time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below',
-            start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', session='$session',
-            communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Medication report updated successfully']; 
       
@@ -1001,15 +935,15 @@ class User extends Connection {
     
     public function delete_medication_report($id) { 
         try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM property_check_report WHERE id = :id');
+            $stmt = $this->pdo->prepare('SELECT * FROM medication_report WHERE id = :id');
             $stmt->execute(['id' => $id]);
 
             if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
             }
-            $stmt = $this->pdo->prepare("UPDATE property_check_report SET status='delete' WHERE id='$id'");
+            $stmt = $this->pdo->prepare("UPDATE medication_report SET status='delete' WHERE id='$id'");
             $stmt->execute();
-            return ['status' => 'success','message'=>'Property check report successfully deleted']; 
+            return ['status' => 'success','message'=>'Medication report successfully deleted']; 
       
             
         } catch (PDOException $e) { 
@@ -1019,18 +953,15 @@ class User extends Connection {
     
     
 
-    public function post_room_check_report(
+    public function post_room_checks_report(
         $service,
-        $compiled_by, 
+        $compiled_by,
         $staff_lead,
-        $date,
         $type,
         $walls_in_good_condition,
         $lights_and_switches_in_good_condition,
         $curtains_and_rails_in_good_condition,
-        $electrical_sockets_in_good_condition,
         $windows,
-        $windows_locks_restriction_in_place,
         $fire_notices_are_posted,
         $radiators_are_working_with_no_leaks,
         $furniture_in_good_condition,
@@ -1044,13 +975,7 @@ class User extends Connection {
         $smoke_alarms_tested_and_working,
         $carbon_monoxide_alarm_tested,
         $evidence_of_battery_charger_used,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
+        $no_e_bike_or_e_scooters_charged,
         $notes,
         $creator_id
     ){
@@ -1063,13 +988,13 @@ class User extends Connection {
                 fire_notices_are_posted, radiators_are_working_with_no_leaks, furniture_in_good_condition, no_sign_of_pest_contamination,
                 floor_coverings_in_good_condition, bathroom_clean_and_in_working_order, kitchen_area_clean_and_tidy, overall_cleanliness_and_hygeine,
                 bins_clean_and_tidy, beddings_clean, smoke_alarms_tested_and_working, carbon_monoxide_alarm_tested, evidence_of_battery_charger_used,
-                start_date, start_time, end_date, end_time, session, communication_method, venue_of_session, notes, creator_id ) 
+                no_e_bike_or_e_scooters_charged, notes, creator_id ) 
                 VALUES ( :service, :compiled_by, :date, :type, :walls_in_good_condition, :lights_and_switches_in_good_condition,
                 :curtains_and_rails_in_good_condition, :electrical_sockets_in_good_condition, :windows, :windows_locks_restriction_in_place,
                 :fire_notices_are_posted, :radiators_are_working_with_no_leaks, :furniture_in_good_condition, :no_sign_of_pest_contamination,
                 :floor_coverings_in_good_condition, :bathroom_clean_and_in_working_order, :kitchen_area_clean_and_tidy, :overall_cleanliness_and_hygeine,
                 :bins_clean_and_tidy, :beddings_clean, :smoke_alarms_tested_and_working, :carbon_monoxide_alarm_tested, :evidence_of_battery_charger_used,
-                :start_date, :start_time, :end_date, :end_time, :session, :communication_method, :venue_of_session, :notes, :creator_id)');
+                :no_e_bike_or_e_scooters_charged, :notes, :creator_id)');
                 $stmt->execute(['service'=>$service, 'compiled_by'=>$compiled_by, 'date'=>$date, 'type'=>$type, 'walls_in_good_condition'=>$walls_in_good_condition, 
                 'lights_and_switches_in_good_condition'=>$lights_and_switches_in_good_condition, 'curtains_and_rails_in_good_condition'=>$curtains_and_rails_in_good_condition, 
                 'electrical_sockets_in_good_condition'=>$electrical_sockets_in_good_condition, 'windows'=>$windows, 'windows_locks_restriction_in_place'=>$windows_locks_restriction_in_place,
@@ -1077,8 +1002,7 @@ class User extends Connection {
                 'no_sign_of_pest_contamination'=>$no_sign_of_pest_contamination, 'floor_coverings_in_good_condition'=>$floor_coverings_in_good_condition, 'bathroom_clean_and_in_working_order'=>$bathroom_clean_and_in_working_order, 
                 'kitchen_area_clean_and_tidy'=>$kitchen_area_clean_and_tidy, 'overall_cleanliness_and_hygeine'=>$overall_cleanliness_and_hygeine,'bins_clean_and_tidy'=>$bins_clean_and_tidy, 'beddings_clean'=>$beddings_clean,
                 'smoke_alarms_tested_and_working'=>$smoke_alarms_tested_and_working, 'carbon_monoxide_alarm_tested'=>$carbon_monoxide_alarm_tested, 'evidence_of_battery_charger_used'=>$evidence_of_battery_charger_used, 
-                'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 'communication_method'=>$communication_method, 'venue_of_session'=>$venue_of_session,
-                'notes'=>$notes, 'creator_id'=>$creator_id
+                'no_e_bike_or_e_scooters_charged'=>$no_e_bike_or_e_scooters_charged, 'notes'=>$notes, 'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New room check report registered successfully'];
@@ -1112,7 +1036,7 @@ class User extends Connection {
                 return ['status' => 'success','data'=>$get_room_check_report]; 
                
             }
-            return ['status' => 'error', 'message' => 'No room check report record for this '.$id];
+            return ['status' => 'error', 'message' => 'No room check report  record for this '.$id];
             
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
@@ -1122,16 +1046,13 @@ class User extends Connection {
     
     public function update_room_check_report(
         $service,
-        $compiled_by, 
+        $compiled_by,
         $staff_lead,
-        $date,
         $type,
         $walls_in_good_condition,
         $lights_and_switches_in_good_condition,
         $curtains_and_rails_in_good_condition,
-        $electrical_sockets_in_good_condition,
         $windows,
-        $windows_locks_restriction_in_place,
         $fire_notices_are_posted,
         $radiators_are_working_with_no_leaks,
         $furniture_in_good_condition,
@@ -1145,13 +1066,7 @@ class User extends Connection {
         $smoke_alarms_tested_and_working,
         $carbon_monoxide_alarm_tested,
         $evidence_of_battery_charger_used,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
+        $no_e_bike_or_e_scooters_charged,
         $notes,
         $id
     ) { 
@@ -1171,8 +1086,7 @@ class User extends Connection {
             bathroom_clean_and_in_working_order='$bathroom_clean_and_in_working_order', kitchen_area_clean_and_tidy='$kitchen_area_clean_and_tidy', 
             overall_cleanliness_and_hygeine='$overall_cleanliness_and_hygeine', bins_clean_and_tidy='$bins_clean_and_tidy', beddings_clean='$beddings_clean', 
             smoke_alarms_tested_and_working='$smoke_alarms_tested_and_working', carbon_monoxide_alarm_tested='$carbon_monoxide_alarm_tested', 
-            evidence_of_battery_charger_used='$evidence_of_battery_charger_used', start_date='$start_date', start_time='$start_time', end_date='$end_date', 
-            end_time='$end_time', session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            evidence_of_battery_charger_used='$evidence_of_battery_charger_used', no_e_bike_or_e_scooters_charged,='$no_e_bike_or_e_scooters_charged', notes='$notes' WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Room check report updated successfully']; 
       
@@ -1203,7 +1117,7 @@ class User extends Connection {
     
     
 
-    public function post_emergency_contract(
+    public function post_emergency_contact(
         $first_name,
         $last_name,
         $other_relationship_to_yp,
@@ -1214,68 +1128,55 @@ class User extends Connection {
         $country_territory,
         $state,
         $street,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
             
 
-            $stmt = $this->pdo->prepare('INSERT INTO emergency_contract (
+            $stmt = $this->pdo->prepare('INSERT INTO emergency_contact (
             first_name, last_name, other_relationship_to_yp, main_contact_number,
             secondary_contact_number, email, address, country_territory, state,
-            street, start_date, start_time, end_date, end_time, session,
-            communication_method, venue_of_session, notes, creator_id) 
+            street, creator_id) 
             VALUES (:first_name, :last_name, :other_relationship_to_yp, :main_contact_number,
             :secondary_contact_number, :email, :address, :country_territory, :state,
-            :street, :start_date, :start_time, :end_date, :end_time, 
-            :session, :communication_method, :venue_of_session, :notes, :creator_id)');
+            :street, :creator_id)');
             $stmt->execute(['first_name'=>$first_name, 'last_name'=>$last_name, 
             'other_relationship_to_yp'=>$other_relationship_to_yp, 'main_contact_number'=>$main_contact_number,
             'secondary_contact_number'=>$secondary_contact_number, 'email'=>$email, 'address'=>$address, 
-            'country_territory'=>$country_territory, 'state'=>$state,'street'=>$street, 'start_date'=>$start_date, 
-            'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 
-            'communication_method'=>$communication_method, 'venue_of_session'=>$venue_of_session, 
-            'notes'=>$notes, 'creator_id'=>$creator_id
+            'country_territory'=>$country_territory, 'state'=>$state,'street'=>$street, 'creator_id'=>$creator_id
             ]);
 
-            return ['status' => 'success', 'message' => 'New emergency contract registered successfully'];
+            return ['status' => 'success', 'message' => 'New emergency contact registered successfully'];
         } catch (PDOException $e) {
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
         }
     }  
     
 
-    public function get_all_emergency_contract() { 
+    public function get_all_emergency_contact() { 
         try { 
 
-            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contract WHERE status IS NULL');
+            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contact WHERE status IS NULL');
             $stmt->execute(); 
-            $get_all_emergency_contract = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            return ['status' => 'success','data'=>$get_all_emergency_contract]; 
+            $get_all_emergency_contact = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_emergency_contact]; 
             
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
         } 
     }    
 
-    public function get_emergency_contract($id) { 
+    public function get_emergency_contact($id) { 
         try { 
 
-            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contract WHERE status IS NULL AND id = :id');
+            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contact WHERE status IS NULL AND id = :id');
             $stmt->execute(['id' => $id]); 
-            $get_emergency_contract= $stmt->fetch(PDO::FETCH_ASSOC);
-            if($get_emergency_contract){  
-                return ['status' => 'success','data'=>$get_emergency_contract]; 
+            $get_emergency_contact= $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_emergency_contact){  
+                return ['status' => 'success','data'=>$get_emergency_contact]; 
                
             }
-            return ['status' => 'error', 'message' => 'No emergency contract record for this '.$id];
+            return ['status' => 'error', 'message' => 'No emergency contact record for this '.$id];
             
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
@@ -1283,7 +1184,7 @@ class User extends Connection {
     } 
     
     
-    public function update_emergency_contract(
+    public function update_emergency_contact(
         $first_name,
         $last_name,
         $other_relationship_to_yp,
@@ -1294,31 +1195,21 @@ class User extends Connection {
         $country_territory,
         $state,
         $street,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contract WHERE id = :id');
+            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contact WHERE id = :id');
             $stmt->execute(['id' => $id]);
 
             if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
              }
-            $stmt = $this->pdo->prepare("UPDATE emergency_contract SET first_name='$first_name', last_name='$last_name',
+            $stmt = $this->pdo->prepare("UPDATE emergency_contact SET first_name='$first_name', last_name='$last_name',
             other_relationship_to_yp='$other_relationship_to_yp', main_contact_number='$main_contact_number',
             secondary_contact_number='$secondary_contact_number', email='$email', address='$address',
-            country_territory='$country_territory', state='$state', street='$street',start_date='$start_date', 
-            start_time='$start_time', end_date='$end_date', end_time='$end_time', session='$session',
-            communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            country_territory='$country_territory', state='$state', street='$street' WHERE id='$id'");
             $stmt->execute();
-            return ['status' => 'success','message'=>'Emergency contract updated successfully']; 
+            return ['status' => 'success','message'=>'Emergency contact updated successfully']; 
       
             
         } catch (PDOException $e) { 
@@ -1328,17 +1219,17 @@ class User extends Connection {
     
     
    
-    public function delete_emergency_contract($id) { 
+    public function delete_emergency_contact($id) { 
         try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contract WHERE id = :id');
+            $stmt = $this->pdo->prepare('SELECT * FROM emergency_contact WHERE id = :id');
             $stmt->execute(['id' => $id]);
 
             if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
             }
-            $stmt = $this->pdo->prepare("UPDATE emergency_contract SET status='delete' WHERE id='$id'");
+            $stmt = $this->pdo->prepare("UPDATE emergency_contact SET status='delete' WHERE id='$id'");
             $stmt->execute();
-            return ['status' => 'success','message'=>'Emergency contract successfully deleted']; 
+            return ['status' => 'success','message'=>'Emergency contact successfully deleted']; 
       
             
         } catch (PDOException $e) { 
@@ -1361,14 +1252,6 @@ class User extends Connection {
         $who_needs_to_know,
         $created_by,
         $last_modified,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
@@ -1376,20 +1259,16 @@ class User extends Connection {
             $stmt = $this->pdo->prepare('INSERT INTO risk_accessment_plan (
             risk_accessment_plan_id, name, assessment_date, next_assessment_date,
             rap_id, type_of_risk, description_of_risk, risk_triggers, mitigating_factors,
-            plan, who_needs_to_know, created_by, last_modified,start_date, start_time, 
-            end_date, end_time, session, communication_method, venue_of_session, notes, creator_id) 
+            plan, who_needs_to_know, created_by, last_modified, creator_id) 
             VALUES ( :risk_accessment_plan_id, :name, :assessment_date, :next_assessment_date,
             :rap_id, :type_of_risk, :description_of_risk, :risk_triggers, :mitigating_factors,
-            :plan, :who_needs_to_know, :created_by, :last_modified, :start_date, :start_time, :end_date, :end_time, 
-            :session, :communication_method, :venue_of_session, :notes, :creator_id)');
+            :plan, :who_needs_to_know, :created_by, :last_modified, :creator_id)');
             $stmt->execute(['risk_accessment_plan_id'=>$risk_accessment_plan_id, 'name'=>$name,
             'assessment_date'=>$assessment_date, 'next_assessment_date'=>$next_assessment_date,
             'rap_id'=>$rap_id, 'type_of_risk'=>$type_of_risk, 'description_of_risk'=>$description_of_risk,
             'risk_triggers'=>$risk_triggers, 'mitigating_factors'=>$mitigating_factors, 'plan'=>$plan,
             'who_needs_to_know'=>$who_needs_to_know, 'created_by'=>$created_by, 'last_modified'=>$last_modified, 
-            'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 
-            'session'=>$session, 'communication_method'=>$communication_method, 
-            'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+             'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New risk accessment plan registered successfully'];
@@ -1443,14 +1322,6 @@ class User extends Connection {
         $who_needs_to_know,
         $created_by,
         $last_modified,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
@@ -1464,8 +1335,7 @@ class User extends Connection {
             name='$name', assessment_date='$assessment_date', next_assessment_date='$next_assessment_date', rap_id='$rap_id',
             type_of_risk='$type_of_risk', description_of_risk='$description_of_risk', risk_triggers='$risk_triggers', 
             mitigating_factors='$mitigating_factors', plan='$plan', who_needs_to_know='$who_needs_to_know', created_by='$created_by', 
-            last_modified='$last_modified', start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', 
-            session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            last_modified='$last_modified' WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Risk accessment plan updated successfully']; 
       
@@ -1520,14 +1390,6 @@ class User extends Connection {
         $running_water,
         $maintenance_hours_reported,
         $refuse_collected_store_correctly,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
@@ -1538,14 +1400,12 @@ class User extends Connection {
             food_waste_in_suitable_containers, food_stored_in_suitable_containers, fridge_and_freezers_are_working,
             floor_stairways_and_corridor_clear, floors_are_free_from_trailing_wires, floor_converings_in_good_condition,
             secure_handrails_and_stairways, bathroom_clean_and_working, running_water, maintenance_hours_reported,
-            refuse_collected_store_correctly, start_date, start_time, end_date, end_time, session, communication_method, 
-            venue_of_session, notes, creator_id) VALUES (:service, :compiled_by, :staff_lead, :date, :escape_route, :fire_warning_indicator,
+            refuse_collected_store_correctly, creator_id) VALUES (:service, :compiled_by, :staff_lead, :date, :escape_route, :fire_warning_indicator,
             :emergency_lightning_good, :extinguishers_fire_fighters, :flammable_material_secure, :evidence_of_used_battery_charger,
             :kitchen_is_clean_and_tidy, :cooker_Extractor_in_good_condition, :floor_are_non_slip_and_dry, :adequate_handwashing_facilities,
             :food_waste_in_suitable_containers, :food_stored_in_suitable_containers, :fridge_and_freezers_are_working, :floor_stairways_and_corridor_clear,
             :floors_are_free_from_trailing_wires, :floor_converings_in_good_condition, :secure_handrails_and_stairways, :bathroom_clean_and_working,
-            :running_water, :maintenance_hours_reported, :refuse_collected_store_correctly, :start_date, :start_time, :end_date, :end_time, 
-            :session, :communication_method, :venue_of_session, :notes, :creator_id)');
+            :running_water, :maintenance_hours_reported, :refuse_collected_store_correctly, :creator_id)');
             $stmt->execute(['service'=>$service, 'compiled_by'=>$compiled_by, 'staff_lead'=>$staff_lead, 'date'=>$date, 'escape_route'=>$escape_route,
             'fire_warning_indicator'=>$fire_warning_indicator, 'emergency_lightning_good'=>$emergency_lightning_good, 'extinguishers_fire_fighters'=>$extinguishers_fire_fighters,
             'flammable_material_secure'=>$flammable_material_secure,'evidence_of_used_battery_charger'=>$evidence_of_used_battery_charger, 
@@ -1555,9 +1415,7 @@ class User extends Connection {
             'fridge_and_freezers_are_working'=>$fridge_and_freezers_are_working, 'floor_stairways_and_corridor_clear'=>$floor_stairways_and_corridor_clear, 
             'floors_are_free_from_trailing_wires'=>$floors_are_free_from_trailing_wires,  'floor_converings_in_good_condition'=>$floor_converings_in_good_condition,
             'secure_handrails_and_stairways'=>$secure_handrails_and_stairways, 'bathroom_clean_and_working'=>$bathroom_clean_and_working, 'running_water'=>$running_water,
-            'maintenance_hours_reported'=>$maintenance_hours_reported, 'refuse_collected_store_correctly'=>$refuse_collected_store_correctly, 'start_date'=>$start_date,
-            'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 'communication_method'=>$communication_method, 
-            'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+            'maintenance_hours_reported'=>$maintenance_hours_reported, 'refuse_collected_store_correctly'=>$refuse_collected_store_correctly, 'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New service check daily report registered successfully'];
@@ -1624,14 +1482,6 @@ class User extends Connection {
         $running_water,
         $maintenance_hours_reported,
         $refuse_collected_store_correctly,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
@@ -1651,8 +1501,7 @@ class User extends Connection {
             floor_stairways_and_corridor_clear='$floor_stairways_and_corridor_clear', floors_are_free_from_trailing_wires='$floors_are_free_from_trailing_wires',  
             floor_converings_in_good_condition='$floor_converings_in_good_condition', secure_handrails_and_stairways='$secure_handrails_and_stairways', 
             bathroom_clean_and_working='$bathroom_clean_and_working', running_water='$running_water', maintenance_hours_reported='$maintenance_hours_reported', 
-            refuse_collected_store_correctly='$refuse_collected_store_correctly', start_date='$start_date', start_time='$start_time', end_date='$end_date',
-            end_time='$end_time', session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            refuse_collected_store_correctly='$refuse_collected_store_correctly' WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Service check daily report updated successfully']; 
       
@@ -1739,14 +1588,6 @@ class User extends Connection {
         $no_of_large_dressings_2,
         $no_of_safety_pins_2,
         $no_of_moisture_cleaning_wipes,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
@@ -1770,8 +1611,7 @@ class User extends Connection {
             no_of_wrapped_triangular_bandage_1, no_of_medium_dressings_1, no_of_large_dressings_1, no_of_safety_pins_1,
             box_location_2, no_of_guidance_leaflet_2, no_of_adhesive_dressings_2, no_of_adhesive_pads_with_bandage_2,
             no_of_wrapped_triangular_bandage_2, no_of_medium_dressings_2, no_of_large_dressings_2, no_of_safety_pins_2,
-            no_of_moisture_cleaning_wipes, start_date, start_time, end_date, end_time, session, communication_method, 
-            venue_of_session, notes, creator_id) VALUES ( :smoke_alarm_tested_and_working, :fire_alarm_points_system_working, 
+            no_of_moisture_cleaning_wipes, creator_id) VALUES ( :smoke_alarm_tested_and_working, :fire_alarm_points_system_working, 
             :carbon_monoxide_alarm_tested, :charging_indicator_on_emergency_lighting, :evidence_of_used_battery_charger,
             :washing_machine_filter_cleaned, :water_filter_in_staff_office_changed, :charcoal_filter_changed_to_ovenhob, 
             :unneccesary_combustible_material, :ventilations_are_not_obstructed, :lightning_levels_are_adequate, 
@@ -1787,8 +1627,7 @@ class User extends Connection {
             :no_of_adhesive_dressings_1, :no_of_adhesive_pads_with_bandage_1, :no_of_wrapped_triangular_bandage_1, :no_of_medium_dressings_1, 
             :no_of_large_dressings_1, :no_of_safety_pins_1, :box_location_2, :no_of_guidance_leaflet_2, :no_of_adhesive_dressings_2, 
             :no_of_adhesive_pads_with_bandage_2, :no_of_wrapped_triangular_bandage_2, :no_of_medium_dressings_2, :no_of_large_dressings_2, 
-            :no_of_safety_pins_2, :no_of_moisture_cleaning_wipes, :start_date, :start_time, :end_date, :end_time, :session, :communication_method, 
-            :venue_of_session, :notes, :creator_id)');
+            :no_of_safety_pins_2, :no_of_moisture_cleaning_wipes, :creator_id)');
             $stmt->execute(['smoke_alarm_tested_and_working'=>$smoke_alarm_tested_and_working, 'fire_alarm_points_system_working'=>$fire_alarm_points_system_working,
             'carbon_monoxide_alarm_tested'=>$carbon_monoxide_alarm_tested, 'charging_indicator_on_emergency_lighting'=>$charging_indicator_on_emergency_lighting,
             'evidence_of_used_battery_charger'=>$evidence_of_used_battery_charger, 'washing_machine_filter_cleaned'=>$washing_machine_filter_cleaned,
@@ -1816,8 +1655,7 @@ class User extends Connection {
             'no_of_adhesive_dressings_2'=>$no_of_adhesive_dressings_2, 'no_of_adhesive_pads_with_bandage_2'=>$no_of_adhesive_pads_with_bandage_2,
             'no_of_wrapped_triangular_bandage_2'=>$no_of_wrapped_triangular_bandage_2, 'no_of_medium_dressings_2'=>$no_of_medium_dressings_2,
             'no_of_large_dressings_2'=>$no_of_large_dressings_2, 'no_of_safety_pins_2'=>$no_of_safety_pins_2, 'no_of_moisture_cleaning_wipes'=>$no_of_moisture_cleaning_wipes,
-            'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 'communication_method'=>$communication_method, 
-            'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+             'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New service check weekly report registered successfully'];
@@ -1857,25 +1695,7 @@ class User extends Connection {
         } 
     }    
 
-    public function delete_service_check_weekly_report($id) { 
-        try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM service_check_weekly_report WHERE id = :id');
-            $stmt->execute(['id' => $id]);
 
-            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
-                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
-            }
-            $stmt = $this->pdo->prepare("UPDATE service_check_weekly_report SET status='delete' WHERE id='$id'");
-            $stmt->execute();
-            return ['status' => 'success','message'=>'Service check weekly report successfully deleted']; 
-      
-            
-        } catch (PDOException $e) { 
-            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
-        } 
-    }   
-    
-    
     public function update_service_check_weekly_report(
         $smoke_alarm_tested_and_working,
         $fire_alarm_points_system_working,
@@ -1933,14 +1753,6 @@ class User extends Connection {
         $no_of_large_dressings_2,
         $no_of_safety_pins_2,
         $no_of_moisture_cleaning_wipes,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
@@ -1976,16 +1788,34 @@ class User extends Connection {
             no_of_guidance_leaflet_2='$no_of_guidance_leaflet_2', no_of_adhesive_dressings_2='$no_of_adhesive_dressings_2',
             no_of_adhesive_pads_with_bandage_2='$no_of_adhesive_pads_with_bandage_2', no_of_wrapped_triangular_bandage_2='$no_of_wrapped_triangular_bandage_2',
             no_of_medium_dressings_2='$no_of_medium_dressings_2', no_of_large_dressings_2='$no_of_large_dressings_2', no_of_safety_pins_2='$no_of_safety_pins_2',
-            no_of_moisture_cleaning_wipes='$no_of_moisture_cleaning_wipes', start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', 
-            session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            no_of_moisture_cleaning_wipes='$no_of_moisture_cleaning_wipes' WHERE id='$id'");
             $stmt->execute();
-            return ['status' => 'success','message'=>'Service check daily report updated successfully']; 
+            return ['status' => 'success','message'=>'Service check weekly report updated successfully']; 
       
             
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
         } 
     }      
+        
+
+    public function delete_service_check_weekly_report($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM service_check_weekly_report WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE service_check_weekly_report SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Service check weekly report successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }   
     
 
 
@@ -2048,14 +1878,6 @@ class User extends Connection {
         $no_of_large_dressings_2,
         $no_of_safety_pins_2,
         $no_of_moisture_cleaning_wipes,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $creator_id
     ){
         try {
@@ -2078,8 +1900,7 @@ class User extends Connection {
             no_of_adhesive_pads_with_bandage_1, no_of_wrapped_triangular_bandage_1, no_of_medium_dressings_1, 
             no_of_large_dressings_1, no_of_safety_pins_1, box_location_2, no_of_guidance_leaflet_2, no_of_adhesive_dressings_2,
             no_of_adhesive_pads_with_bandage_2, no_of_wrapped_triangular_bandage_2, no_of_medium_dressings_2, no_of_large_dressings_2,
-            no_of_safety_pins_2, no_of_moisture_cleaning_wipes, start_date, start_time, end_date, end_time, session, communication_method, 
-            venue_of_session, notes, creator_id) VALUES ( :door_seals_and_self_closing_devices, :internal_self_closing_firedoors, :emergency_lightning_function,
+            no_of_safety_pins_2, no_of_moisture_cleaning_wipes, creator_id) VALUES ( :door_seals_and_self_closing_devices, :internal_self_closing_firedoors, :emergency_lightning_function,
             :evidence_of_used_battery_charger, :washing_machine_filter_cleaned, :water_dispenser_drip_trays_cleaned,
             :auto_hold_open_freeswing_doors_fitted, :sample_water_temperature_test, :no_smoking_sign_displayed,
             :furniture_complaints_updated_closed, :completed_repairs_updated_closed, :add_decoration_to_maintainance,
@@ -2097,8 +1918,7 @@ class User extends Connection {
             :no_of_adhesive_pads_with_bandage_1, :no_of_wrapped_triangular_bandage_1, :no_of_medium_dressings_1, 
             :no_of_large_dressings_1, :no_of_safety_pins_1, :box_location_2, :no_of_guidance_leaflet_2, :no_of_adhesive_dressings_2,
             :no_of_adhesive_pads_with_bandage_2, :no_of_wrapped_triangular_bandage_2, :no_of_medium_dressings_2, :no_of_large_dressings_2,
-            :no_of_safety_pins_2, :no_of_moisture_cleaning_wipes, :start_date, :start_time, :end_date, :end_time, :session, :communication_method, 
-            :venue_of_session, :notes, :creator_id)');
+            :no_of_safety_pins_2, :no_of_moisture_cleaning_wipes, :creator_id)');
             $stmt->execute(['door_seals_and_self_closing_devices'=>$door_seals_and_self_closing_devices, 
             'internal_self_closing_firedoors'=>$internal_self_closing_firedoors, 'emergency_lightning_function'=>$emergency_lightning_function, 
             'evidence_of_used_battery_charger'=>$evidence_of_used_battery_charger, 'washing_machine_filter_cleaned'=>$washing_machine_filter_cleaned, 
@@ -2126,8 +1946,7 @@ class User extends Connection {
             'no_of_guidance_leaflet_2'=>$no_of_guidance_leaflet_2, 'no_of_adhesive_dressings_2'=>$no_of_adhesive_dressings_2, 
             'no_of_adhesive_pads_with_bandage_2'=>$no_of_adhesive_pads_with_bandage_2, 'no_of_wrapped_triangular_bandage_2'=>$no_of_wrapped_triangular_bandage_2, 
             'no_of_medium_dressings_2'=>$no_of_medium_dressings_2, 'no_of_large_dressings_2'=>$no_of_large_dressings_2, 'no_of_safety_pins_2'=>$no_of_safety_pins_2, 
-            'no_of_moisture_cleaning_wipes'=>$no_of_moisture_cleaning_wipes, 'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 'session'=>$session, 
-            'communication_method'=>$communication_method, 'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+            'no_of_moisture_cleaning_wipes'=>$no_of_moisture_cleaning_wipes, 'creator_id'=>$creator_id
             ]);
 
             return ['status' => 'success', 'message' => 'New service check monthly report registered successfully'];
@@ -2166,25 +1985,7 @@ class User extends Connection {
         } catch (PDOException $e) { 
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
         } 
-    }    
-
-    public function delete_service_check_monthly_report($id) { 
-        try { 
-            $stmt = $this->pdo->prepare('SELECT * FROM service_check_monthly_report WHERE id = :id');
-            $stmt->execute(['id' => $id]);
-
-            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
-                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
-            }
-            $stmt = $this->pdo->prepare("UPDATE service_check_monthly_report SET status='delete' WHERE id='$id'");
-            $stmt->execute();
-            return ['status' => 'success','message'=>'Service check monthly report successfully deleted']; 
-      
-            
-        } catch (PDOException $e) { 
-            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
-        } 
-    }
+    } 
     
     
     public function update_service_check_monthly_report(
@@ -2246,14 +2047,6 @@ class User extends Connection {
         $no_of_large_dressings_2,
         $no_of_safety_pins_2,
         $no_of_moisture_cleaning_wipes,
-        $start_date,
-        $start_time,
-        $end_date,
-        $end_time,
-        $session,
-        $communication_method,
-        $venue_of_session,
-        $notes,
         $id
     ) { 
         try { 
@@ -2290,8 +2083,7 @@ class User extends Connection {
             no_of_guidance_leaflet_2='$no_of_guidance_leaflet_2', no_of_adhesive_dressings_2='$no_of_adhesive_dressings_2',
             no_of_adhesive_pads_with_bandage_2='$no_of_adhesive_pads_with_bandage_2', no_of_wrapped_triangular_bandage_2='$no_of_wrapped_triangular_bandage_2',
             no_of_medium_dressings_2='$no_of_medium_dressings_2', no_of_large_dressings_2='$no_of_large_dressings_2', no_of_safety_pins_2='$no_of_safety_pins_2',
-            no_of_moisture_cleaning_wipes='$no_of_moisture_cleaning_wipes', start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', 
-            session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            no_of_moisture_cleaning_wipes='$no_of_moisture_cleaning_wipes' WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Service check monthly report updated successfully']; 
       
@@ -2300,7 +2092,584 @@ class User extends Connection {
             return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
         } 
     }     
-       
+
+    public function delete_service_check_monthly_report($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM service_check_monthly_report WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE service_check_monthly_report SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Service check monthly report successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }
+    
+    
+
+    public function post_case_note(
+        $start_date,
+        $start_time,
+        $end_date,
+        $end_time,
+        $session,
+        $communication_method,
+        $venue_of_session,
+        $notes,
+        $creator_id
+    ){
+        try {
+            
+            $stmt = $this->pdo->prepare('INSERT INTO case_note (
+            start_date, start_time, end_date, end_time, session, communication_method, 
+            venue_of_session,  notes, creator_id) 
+            VALUES (:start_date, :start_time, :end_date, :end_time,  :session, :communication_method, 
+            :venue_of_session, :notes, :creator_id)');
+            $stmt->execute([ 
+            'start_date'=>$start_date, 'start_time'=>$start_time, 'end_date'=>$end_date, 'end_time'=>$end_time, 
+            'session'=>$session, 'communication_method'=>$communication_method, 
+            'venue_of_session'=>$venue_of_session, 'notes'=>$notes, 'creator_id'=>$creator_id
+            ]);
+
+            return ['status' => 'success', 'message' => 'New case note plan registered successfully'];
+        } catch (PDOException $e) {
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        }
+    }
+
+
+
+    public function get_all_case_note() { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM case_note WHERE status IS NULL');
+            $stmt->execute(); 
+            $get_all_case_note = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_case_note]; 
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }
+    
+    
+    public function get_case_note($id) { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM case_note WHERE status IS NULL AND id = :id');
+            $stmt->execute(['id' => $id]); 
+            $get_case_note= $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_case_note){  
+                return ['status' => 'success','data'=>$get_case_note]; 
+               
+            }
+            return ['status' => 'error', 'message' => 'No case note record for this '.$id];
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    } 
+    
+    
+    public function update_case_note(
+        $start_date,
+        $start_time,
+        $end_date,
+        $end_time,
+        $session,
+        $communication_method,
+        $venue_of_session,
+        $notes,
+        $id
+    ) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM case_note WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
+             }
+            $stmt = $this->pdo->prepare("UPDATE case_note SET  start_date='$start_date', start_time='$start_time', end_date='$end_date', end_time='$end_time', 
+            session='$session', communication_method='$communication_method', venue_of_session='$venue_of_session', notes='$notes' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Case note updated successfully']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    } 
+    
+
+
+    public function delete_case_note($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM case_note WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE case_note SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Case note successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }    
+    
+
+    
+    public function post_prevoid_management(
+        $service,
+        $room,
+        $intended_void_date,
+        $starter_pack_available,
+        $void_tips,
+        $bed,
+        $mattress,
+        $side_table,
+        $wardrobe,
+        $desk_and_chair,
+        $curtains,
+        $lamps,
+        $Keys_and_spare,
+        $furniture_comments,
+        $cooker,
+        $fridge_freezer,
+        $washing_machine,
+        $microwave,
+        $comments,
+        $cleaning_needed,
+        $deep_cleaning_needed,
+        $bedroom,
+        $bathroom,
+        $kitchen,
+        $others,
+        $system_info,
+        $last_modified_by,
+        $created_by,
+        $white_goods,
+        $flooring,
+        $outdoors_areas,
+        $cleaning_comments,
+        $creator_id
+    ){
+        try {
+            
+            $stmt = $this->pdo->prepare('INSERT INTO prevoid_managements (
+            service ,room, intended_void_date, starter_pack_available, void_tips, bed, mattress,
+            side_table, wardrobe, desk_and_chair, curtains, lamps, keys_and_spare, funiture_comments,
+            cooker, fridge_freezer, washing_machine, microwave, comments, cleaning_needed, 
+            deep_cleaning_needed, bedroom, bathroom, kitchen, others, system_info, last_modified_by, 
+            created_by, white_goods, flooring, outdoors_areas, cleaning_comments, creator_id) 
+            VALUES (:service ,:room, :intended_void_date, :starter_pack_available, :void_tips, bed, :mattress,
+            :side_table, :wardrobe, :desk_and_chair, :curtains, :lamps, :keys_and_spare, :funiture_comments,
+            :cooker, :fridge_freezer, :washing_machine, :microwave, :comments, :cleaning_needed, 
+            :deep_cleaning_needed, :bedroom, :bathroom, :kitchen, :others, :system_info, :last_modified_by, 
+            :created_by, :white_goods, :flooring, :outdoors_areas, :cleaning_comments, :creator_id)');
+            $stmt->execute([ 
+                'service' =>$service , 'room'=>$room, 'intended_void_date'=>$intended_void_date, 'starter_pack_available'=>$starter_pack_available, 
+                'void_tips'=>$void_tips, 'bed'=>$bed, 'mattress'=>$mattress, 'side_table'=>$side_table, 'wardrobe'=>$side_table, 
+                'desk_and_chair'=>$desk_and_chair, 'curtains'=>$curtains, 'lamps'=>$lamps, 'keys_and_spare'=>$keys_and_spare, 
+                'funiture_comments'=>$funiture_comments, 'cooker'=>$cooker, 'fridge_freezer'=>$fridge_freezer, 
+                'washing_machine'=>$washing_machine, 'microwave'=>$microwave, 'comments'=>$comments, 'cleaning_needed'=>$cleaning_needed, 
+                'deep_cleaning_needed'=>$deep_cleaning_needed, 'bathroom'=>$bathroom, 'kitchen'=>$kitchen, 'others'=>$others, 
+                'system_info'=>$system_info, 'last_modified_by'=>$last_modified_by, 'created_by'=>$created_by, 'white_goods'=>$white_goods, 
+                'flooring'=>$flooring, 'outdoors_areas'=>$outdoors_areas, 'cleaning_comments'=>$cleaning_comments, 'creator_id'=>$creator_id
+            ]);
+
+            return ['status' => 'success', 'message' => 'New prevoid management registered successfully'];
+        } catch (PDOException $e) {
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        }
+    }
+
+
+
+    public function get_all_prevoid_management() { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM prevoid_management WHERE status IS NULL');
+            $stmt->execute(); 
+            $get_all_prevoid_management = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_prevoid_managements]; 
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }
+    
+    
+    public function get_prevoid_management($id) { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM prevoid_management WHERE status IS NULL AND id = :id');
+            $stmt->execute(['id' => $id]); 
+            $get_prevoid_management= $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_prevoid_management){  
+                return ['status' => 'success','data'=>$get_prevoid_management]; 
+               
+            }
+            return ['status' => 'error', 'message' => 'No prevoid management record for this '.$id];
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }  
+    
+    public function update_prevoid_management(
+        $service,
+        $room,
+        $intended_void_date,
+        $starter_pack_available,
+        $void_tips,
+        $bed,
+        $mattress,
+        $side_table,
+        $wardrobe,
+        $desk_and_chair,
+        $curtains,
+        $lamps,
+        $Keys_and_spare,
+        $furniture_comments,
+        $cooker,
+        $fridge_freezer,
+        $washing_machine,
+        $microwave,
+        $comments,
+        $cleaning_needed,
+        $deep_cleaning_needed,
+        $bedroom,
+        $bathroom,
+        $kitchen,
+        $others,
+        $system_info,
+        $last_modified_by,
+        $created_by,
+        $white_goods,
+        $flooring,
+        $outdoors_areas,
+        $cleaning_comments,
+        $id
+    ) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM prevoid_management WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
+             }
+            $stmt = $this->pdo->prepare("UPDATE prevoid_management SET  service ='$service' , room='$room', 
+            intended_void_date='$intended_void_date', starter_pack_available='$starter_pack_available', void_tips='$void_tips', 
+            bed='$bed', mattress='$mattress', side_table='$side_table', wardrobe='$side_table', desk_and_chair='$desk_and_chair', 
+            curtains='$curtains', lamps='$lamps', keys_and_spare='$keys_and_spare', funiture_comments='$funiture_comments', 
+            cooker='$cooker', fridge_freezer='$fridge_freezer', washing_machine='$washing_machine', microwave='$microwave', 
+            comments='$comments', cleaning_needed='$cleaning_needed', deep_cleaning_needed='$deep_cleaning_needed', bathroom='$bathroom', 
+            kitchen='$kitchen', others='$others', system_info='$system_info', last_modified_by='$last_modified_by', created_by='$created_by', 
+            white_goods='$white_goods', flooring='$flooring', outdoors_areas='$outdoors_areas', cleaning_comments='$cleaning_comments' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Prevoid management updated successfully']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    } 
+    
+
+    public function delete_prevoid_management($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM prevoid_management WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE prevoid_management SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Prevoid managment successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }    
+    
+
+
+    public function post_maintenance(
+        $service_name,
+        $room_number,
+        $job_reported_by_staff_or_young_person,
+        $name_of_young_person,
+        $date_repair_requested,
+        $time_repair_requested,
+        $upload_file,
+        $job_priority,
+        $reference_number,
+        $cost_of_repairs,
+        $purchase_order_number,
+        $post_job_completion_amount,
+        $contractor_name,
+        $date_po_raised,
+        $repair_timescale,
+        $pre_inspection_date,
+        $pre_inspection_comments,
+        $post_job_completion_date,
+        $repair_completion_date,
+        $staff_member_sign_out,
+        $system_info,
+        $created_by,
+        $last_modified_by,
+        $post_completion_comments,
+        $creator_id
+    ){
+        try {
+            
+            $stmt = $this->pdo->prepare('INSERT INTO maintenance (
+            service_name, room_number, job_reported_by_staff_or_young_person, name_of_young_person,
+            date_repair_requested, time_repair_requested, upload_file, job_priority, reference_number,
+            cost_of_repairs, purchase_order_number, post_job_completion_amount, contractor_name,
+            date_po_raised, repair_timescale, pre_inspection_date, pre_inspection_comments,
+            post_job_completion_date, repair_completion_date, staff_member_sign_out, system_info,
+            created_by, last_modified_by, post_completion_comments, creator_id) 
+            VALUES (:service_name, :room_number, :job_reported_by_staff_or_young_person, :name_of_young_person,
+            :date_repair_requested, :time_repair_requested, :upload_file, :job_priority, :reference_number,
+            :cost_of_repairs, :purchase_order_number, :post_job_completion_amount, :contractor_name,
+            :date_po_raised, :repair_timescale, :pre_inspection_date, :pre_inspection_comments,
+            :post_job_completion_date, :repair_completion_date, :staff_member_sign_out, :system_info,
+            :created_by, :last_modified_by, :post_completion_comments, :creator_id)');
+            $stmt->execute([ 
+            'service_name'=>$service_name, 'room_number'=>$room_number, 'job_reported_by_staff_or_young_person'=>$job_reported_by_staff_or_young_person,
+            'name_of_young_person'=>$name_of_young_person, 'date_repair_requested'=>$date_repair_requested, 'time_repair_requested'=>$time_repair_requested, 
+            'upload_file'=>$upload_file, 'job_priority'=>$job_priority, 'reference_number'=>$reference_number, 'cost_of_repairs'=>$cost_of_repairs, 
+            'purchase_order_number'=>$purchase_order_number, 'post_job_completion_amount'=>$post_job_completion_amount, 'contractor_name'=>$contractor_name,
+            'date_po_raised'=>$date_po_raised, 'repair_timescale'=>$repair_timescale, 'pre_inspection_date'=>$pre_inspection_date, 
+            'pre_inspection_comments'=>$pre_inspection_comments, 'post_job_completion_date'=>$post_job_completion_date, 'repair_completion_date'=>$repair_completion_date, 
+            'staff_member_sign_out'=>$staff_member_sign_out, 'system_info'=>$system_info, 'created_by'=>$created_by, 'last_modified_by'=>$last_modified_by, 
+            'post_completion_comments'=>$post_completion_comments, 'creator_id'=>$creator_id
+            ]);
+
+            return ['status' => 'success', 'message' => 'New maintenance registered successfully'];
+        } catch (PDOException $e) {
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        }
+    }
+
+
+
+    public function get_all_maintenance() { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM maintenance WHERE status IS NULL');
+            $stmt->execute(); 
+            $get_all_maintenance = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_maintenance]; 
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }
+    
+    
+    public function get_case_maintenance($id) { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM maintenance WHERE status IS NULL AND id = :id');
+            $stmt->execute(['id' => $id]); 
+            $get_maintenance= $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_maintenance){  
+                return ['status' => 'success','data'=>$get_maintenance]; 
+               
+            }
+            return ['status' => 'error', 'message' => 'No maintenance record for this '.$id];
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    } 
+    
+    public function update_maintenance(
+        $service_name,
+        $room_number,
+        $job_reported_by_staff_or_young_person,
+        $name_of_young_person,
+        $date_repair_requested,
+        $time_repair_requested,
+        $upload_file,
+        $job_priority,
+        $reference_number,
+        $cost_of_repairs,
+        $purchase_order_number,
+        $post_job_completion_amount,
+        $contractor_name,
+        $date_po_raised,
+        $repair_timescale,
+        $pre_inspection_date,
+        $pre_inspection_comments,
+        $post_job_completion_date,
+        $repair_completion_date,
+        $staff_member_sign_out,
+        $system_info,
+        $created_by,
+        $last_modified_by,
+        $post_completion_comments,
+        $id
+    ) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM maintenance WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
+             }
+            $stmt = $this->pdo->prepare("UPDATE maintenance SET  service_name='$service_name', room_number='$room_number', job_reported_by_staff_or_young_person='$job_reported_by_staff_or_young_person', 
+            name_of_young_person='$name_of_young_person', date_repair_requested='$date_repair_requested', time_repair_requested='$time_repair_requested', upload_file='$upload_file', job_priority='$job_priority', 
+            reference_number='$reference_number', cost_of_repairs='$cost_of_repairs', purchase_order_number='$purchase_order_number', post_job_completion_amount='$post_job_completion_amount', 
+            contractor_name='$contractor_name', date_po_raised='$date_po_raised', repair_timescale='$repair_timescale', pre_inspection_date='$pre_inspection_date', pre_inspection_comments='$pre_inspection_comments',
+            post_job_completion_date='$post_job_completion_date', repair_completion_date='$repair_completion_date', staff_member_sign_out='$staff_member_sign_out', system_info='$system_info',
+            created_by='$created_by', last_modified_by='$last_modified_by', post_completion_comments='$post_completion_comments' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Maintenance note updated successfully']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }    
+
+    public function delete_maintenance($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM maintenance WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE maintenance SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Maintenance successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    } 
+    
+    
+
+    public function post_complaint(
+        $client,
+        $date,
+        $time,
+        $is_medication_still_accurate,
+        $list_yps_medication_below,
+        $creator_id
+    ){
+        try {
+            $stmt = $this->pdo->prepare('INSERT INTO complaint (
+            client, date, time, is_medication_still_accurate, list_yps_medication_below, creator_id) 
+            VALUES (:client, :date, :time, :is_medication_still_accurate, 
+            :list_yps_medication_below, :creator_id)');
+            $stmt->execute(['client'=>$client, 'date'=>$date, 'time'=>$time,  'is_medication_still_accurate'=>$is_medication_still_accurate, 
+            'list_yps_medication_below'=>$list_yps_medication_below, 'creator_id'=>$creator_id
+            ]);
+
+            return ['status' => 'success', 'message' => 'New complaint registered successfully'];
+        } catch (PDOException $e) {
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        }
+    } 
+    
+
+    public function get_all_complaint() { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM complaint WHERE status IS NULL');
+            $stmt->execute(); 
+            $get_all_complaint = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return ['status' => 'success','data'=>$get_all_complaint]; 
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }
+
+
+    public function get_complaint($id) { 
+        try { 
+
+            $stmt = $this->pdo->prepare('SELECT * FROM complaint WHERE status IS NULL AND id = :id');
+            $stmt->execute(['id' => $id]); 
+            $get_complaint = $stmt->fetch(PDO::FETCH_ASSOC);
+            if($get_complaint){  
+                return ['status' => 'success','data'=>$get_complaint]; 
+               
+            }
+            return ['status' => 'error', 'message' => 'No complaint report record for this '.$id];
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()]; 
+        } 
+    }     
+
+
+    public function update_complaint(
+        $client,
+        $date,
+        $time,
+        $is_medication_still_accurate,
+        $list_yps_medication_below,
+        $id
+    ) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM complaint WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
+             }
+            $stmt = $this->pdo->prepare("UPDATE complaint SET client='$client' ,date='$date',
+            time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below',
+            WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Complaint report updated successfully']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }  
+    
+    
+    public function delete_complaint($id) { 
+        try { 
+            $stmt = $this->pdo->prepare('SELECT * FROM complaint WHERE id = :id');
+            $stmt->execute(['id' => $id]);
+
+            if (!$stmt->fetch(PDO::FETCH_ASSOC)) {
+                return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this delete'];
+            }
+            $stmt = $this->pdo->prepare("UPDATE complaint SET status='delete' WHERE id='$id'");
+            $stmt->execute();
+            return ['status' => 'success','message'=>'Complaint successfully deleted']; 
+      
+            
+        } catch (PDOException $e) { 
+            return ['status' => 'error', 'message' => 'Database query failed: ' . $e->getMessage()];
+        } 
+    }  
+
+         
 
     public function protectData($data){
         return  strip_tags(trim($data));

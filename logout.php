@@ -1,6 +1,7 @@
 <?php
 require_once 'RoleMiddleware.php';
 include 'cors.php';
+
 $response = RoleMiddleware::checkRole(['admin','user']);
 
 if ($response['status'] === 'success') {

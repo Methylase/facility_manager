@@ -1,5 +1,6 @@
 <?php
 require_once 'RoleMiddleware.php';
+include 'cors.php';
 
 $response = RoleMiddleware::checkRole(['user']);
 
@@ -118,14 +119,6 @@ if ($response['status'] === 'success') {
         $action_54  = isset($data['action_54']) ? $user->protectData($data['action_54']) :'';
         $no_of_moisture_cleaning_wipes = isset($data['no_of_moisture_cleaning_wipes']) ? $user->protectData($data['no_of_moisture_cleaning_wipes']) :'';
         $action_55  = isset($data['action_55']) ? $user->protectData($data['action_55']) :'';
-        $start_date  = isset($data['start_date']) ? $user->protectData($data['start_date']) :'';
-        $start_time  = isset($data['start_time']) ? $user->protectData($data['start_time']) :'';
-        $end_date  = isset($data['end_date']) ? $user->protectData($data['end_date']) :'';
-        $end_time  = isset($data['end_time']) ? $user->protectData($data['end_time']) :'';
-        $session  = isset($data['end_time']) ? $user->protectData($data['end_time']) :'';
-        $communication_method  = isset($data['communication_method']) ? $user->protectData($data['communication_method']) :'';
-        $venue_of_session  = isset($data['venue_of_session']) ? $user->protectData($data['venue_of_session']) :'';
-        $notes  = isset($data['notes']) ? $user->protectData($data['notes']) :'';
         $id =isset($data['id']) ? $user->protectData($data['id']) :'';
 
         if($action_1 !=''){
@@ -299,14 +292,6 @@ if ($response['status'] === 'success') {
                 $no_of_large_dressings_2,
                 $no_of_safety_pins_2,
                 $no_of_moisture_cleaning_wipes,
-                $start_date,
-                $start_time,
-                $end_date,
-                $end_time,
-                $session,
-                $communication_method,
-                $venue_of_session,
-                $notes,
                 $id
             );
         

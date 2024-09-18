@@ -1,5 +1,6 @@
 <?php
 require_once 'RoleMiddleware.php';
+include 'cors.php';
 
 $response = RoleMiddleware::checkRole(['user']);
 
@@ -17,15 +18,6 @@ if ($response['status'] === 'success') {
         $service = isset($data['service']) ? $user->protectData($data['service']) :'';
         $room  = isset($data['room']) ? $user->protectData($data['room']) :'';
         $location_notes  = isset($data['location_notes']) ? $user->protectData($data['location_notes']) :'';
-        $start_date  = isset($data['start_date']) ? $user->protectData($data['start_date']) :'';
-        $start_time  = isset($data['start_time']) ? $user->protectData($data['start_time']) :'';
-        $end_date  = isset($data['end_date']) ? $user->protectData($data['end_date']) :'';
-        $end_time  = isset($data['end_time']) ? $user->protectData($data['end_time']) :'';
-        $session  = isset($data['end_time']) ? $user->protectData($data['end_time']) :'';
-        $communication_method  = isset($data['communication_method']) ? $user->protectData($data['communication_method']) :'';
-        $venue_of_session  = isset($data['venue_of_session']) ? $user->protectData($data['venue_of_session']) :'';
-        $case_notes  = isset($data['case_notes']) ? $user->protectData($data['case_notes']) :'';
-
 
         $response = $user->property_check_report(
             $property_checked_name,
@@ -38,14 +30,6 @@ if ($response['status'] === 'success') {
             $service,
             $room,
             $location_notes,
-            $start_date,
-            $start_time,
-            $end_date,
-            $end_time,
-            $session,
-            $communication_method,
-            $venue_of_session,
-            $case_notes,
             $response['creator_id']
     );
     
