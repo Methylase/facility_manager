@@ -706,7 +706,7 @@ class User extends Connection {
                 is_yp_aware_that_you_will_contact_external_agencies='$is_yp_aware_that_you_will_contact_external_agencies', if_no_enter_brief_outline_otherwise_write_n_a='$if_no_enter_brief_outline_otherwise_write_n_a',
                 allegations_suspension_of_substance_abuse='$allegations_suspension_of_substance_abuse', witness_es_statements_need_to_be_taken_down='$witness_es_statements_need_to_be_taken_down',
                 has_a_manager_been_informed='$has_a_manager_been_informed', has_a_marac_referral_been_made='$has_a_marac_referral_been_made', i_a_of_marac_refferal='$i_a_of_marac_refferal', created_by='$created_by',
-                last_modified='$last_modified', WHERE id='$id'");
+                last_modified='$last_modified' WHERE id='$id'");
                 $stmt->execute();
                 return ['status' => 'success','message'=>'Incident report updated successfully']; 
           
@@ -820,7 +820,7 @@ class User extends Connection {
              }
             $stmt = $this->pdo->prepare("UPDATE property_check_report SET property_checked_name='$property_checked_name', type='$type',
             date_of_check='$date_of_check', time_of_check='$time_of_check', staff_lead='$staff_lead', staff_assistant='$staff_assistant',
-            yp_assisting_check='$yp_assisting_check', service='$service', room='$room', location_notes='$location_notes', WHERE id='$id'");
+            yp_assisting_check='$yp_assisting_check', service='$service', room='$room', location_notes='$location_notes' WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Property check report updated successfully']; 
       
@@ -921,7 +921,7 @@ class User extends Connection {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
              }
             $stmt = $this->pdo->prepare("UPDATE medication_report SET client='$client' ,date='$date',
-            time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below',
+            time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below'
             WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Medication report updated successfully']; 
@@ -2639,7 +2639,7 @@ class User extends Connection {
                 return ['status' => 'error', 'message' => 'You don\'t have permission to carry out this update'];
              }
             $stmt = $this->pdo->prepare("UPDATE complaint SET client='$client' ,date='$date',
-            time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below',
+            time='$time', is_medication_still_accurate='$is_medication_still_accurate', list_yps_medication_below='$list_yps_medication_below'
             WHERE id='$id'");
             $stmt->execute();
             return ['status' => 'success','message'=>'Complaint report updated successfully']; 
